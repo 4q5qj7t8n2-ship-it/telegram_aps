@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Накрутка - Лучший сервис</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .service-list {
+            margin: 20px 0;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 2px solid transparent;
+        }
+
+        .service-item.active {
+            border-color: #007bff;
+            background: #e7f3ff;
+        }
+
+        .service-checkbox {
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+        }
+
+        .service-name {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .divider {
+            height: 1px;
+            background: #e0e0e0;
+            margin: 20px 0;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-around;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .nav-item {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            background: #007bff;
+            color: white;
+        }
+
+        .button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+
+        .button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1># Новый заказ</h1>
+            <div class="subtitle">Выберите сервис для накрутки</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="service-list">
+            <div class="service-item active">
+                <input type="checkbox" class="service-checkbox" checked>
+                <span class="service-name">Telegram</span>
+            </div>
+            <div class="service-item">
+                <input type="checkbox" class="service-checkbox">
+                <span class="service-name">YouTube</span>
+            </div>
+            <div class="service-item active">
+                <input type="checkbox" class="service-checkbox" checked>
+                <span class="service-name">Discord</span>
+            </div>
+            <div class="service-item">
+                <input type="checkbox" class="service-checkbox">
+                <span class="service-name">Twitch</span>
+            </div>
+            <div class="service-item">
+                <input type="checkbox" class="service-checkbox">
+                <span class="service-name">Instagram</span>
+            </div>
+            <div class="service-item active">
+                <input type="checkbox" class="service-checkbox" checked>
+                <span class="service-name">VK</span>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="navigation">
+            <div class="nav-item active">Новый заказ</div>
+            <div class="nav-item">Заказы</div>
+            <div class="nav-item">Профиль</div>
+        </div>
+
+        <button class="button" onclick="createOrder()">Создать заказ</button>
+    </div>
+
+    <script>
+        // Инициализация Telegram Web App
+        const tg = window.Telegram.WebApp;
+
+        // Расширяем на все окно
+        tg.expand();
+
+        // Показываем основную кнопку
+        tg.MainButton.setText('Создать заказ');
+        tg.MainButton.show();
+
+        // Обработчик для чекбоксов
+        document.querySelectorAll('.service-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const item = this.closest('.service-item');
+                if (this.checked) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        });
+
+        // Функция создания заказа
+        function createOrder() {
+            const selectedServices = [];
+            document.querySelectorAll('.service-checkbox:checked').forEach(checkbox => {
+                const serviceName = checkbox.closest('.service-item').querySelector('.service-name').textContent;
+                selectedServices.push(serviceName);
+            });
+
+            tg.showPopup({
+                title: 'Заказ создан!',
+                message: `Вы выбрали: ${selectedServices.join(', ')}`,
+                buttons: [{ type: 'ok' }]
+            });
+        }
+
+        // Готовность приложения
+        tg.ready();
+    </script>
+</body>
+</html>
